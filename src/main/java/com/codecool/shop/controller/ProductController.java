@@ -7,6 +7,8 @@ import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.*;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -15,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProductController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
     //DAOMEM usage
     //    private static ProductDao productDataStore = ProductDaoMem.getInstance();
@@ -35,6 +39,7 @@ public class ProductController {
         params.put("categories", productCategoryDataStore.getAll());
         params.put("products", productDataStore.getAll());
         params.put("suppliers", supplierDataStore.getAll());
+        logger.info("Products from database loaded");
         return new ModelAndView(params, "product/index");
     }
 
@@ -43,6 +48,7 @@ public class ProductController {
         for (ProductCategory cat : productCategoryDataStore.getAll()) {
             if (req.params(":name").equals(cat.getName())) {
                 categoryToFilter = productCategoryDataStore.find(cat.getId());
+                logger.debug("Products have been filtered by category");
             }
         }
 
@@ -50,6 +56,8 @@ public class ProductController {
         params.put("categories", productCategoryDataStore.getAll());
         params.put("products", productDataStore.getBy(categoryToFilter));
         params.put("suppliers", supplierDataStore.getAll());
+
+
         return new ModelAndView(params, "product/index");
     }
 
@@ -58,6 +66,7 @@ public class ProductController {
         for (Supplier sup : supplierDataStore.getAll()) {
             if (req.params(":name").equals(sup.getName())) {
                 supplierToFilter = supplierDataStore.find(sup.getId());
+                logger.debug("Products have been filtered by supplier");
             }
         }
 
@@ -65,6 +74,8 @@ public class ProductController {
         params.put("categories", productCategoryDataStore.getAll());
         params.put("products", productDataStore.getBy(supplierToFilter));
         params.put("suppliers", supplierDataStore.getAll());
+
+
         return new ModelAndView(params, "product/index");
     }
 
@@ -74,6 +85,9 @@ public class ProductController {
         Map params = new HashMap<>();
         params.put("cart", shoppingCartDataStore.getAll());
         params.put("TotalPrice", shoppingCartDataStore.getTotal());
+
+        logger.debug("Loaded shopping cart");
+
         return new ModelAndView(params, "product/cart");
     }
 

@@ -4,6 +4,8 @@ package com.codecool.shop.dao.implementation;
 import com.codecool.shop.dao.JDBC;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.model.ProductCategory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,6 +16,8 @@ import java.util.List;
 
 public class ProductCategoryDaoJDBC extends JDBC implements ProductCategoryDao {
     private static ProductCategoryDaoJDBC instance = null;
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductCategoryDaoJDBC.class);
 
     private ProductCategoryDaoJDBC() {
     }
@@ -42,6 +46,7 @@ public class ProductCategoryDaoJDBC extends JDBC implements ProductCategoryDao {
                 "VALUES ('" + category.getId() + "','" + category.getName() + "','" + category.getDepartment() +
                 "','" + category.getDescription() + "');";
         executeQuery(query);
+        logger.info("Product category has been added");
 
     }
 
@@ -63,6 +68,7 @@ public class ProductCategoryDaoJDBC extends JDBC implements ProductCategoryDao {
                 return productCategorySetup(resultSet);
 
             } else {
+                logger.warn("Product category not found");
                 return null;
             }
 
@@ -81,6 +87,7 @@ public class ProductCategoryDaoJDBC extends JDBC implements ProductCategoryDao {
         }
         String query = "DELETE FROM categories WHERE category_id = '" + id + "';";
         executeQuery(query);
+        logger.info("Product category has been removed");
     }
 
 
@@ -97,6 +104,7 @@ public class ProductCategoryDaoJDBC extends JDBC implements ProductCategoryDao {
 
                 productCategoriesFromDB.add(productCategorySetup(resultSet));
             }
+            logger.trace("All product categories: {}", resultSet);
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,6 +1,9 @@
 package com.codecool.shop.dao;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +15,7 @@ import java.util.Properties;
 
 public abstract class JDBC {
 
+    private static final Logger logger = LoggerFactory.getLogger(JDBC.class);
 
     protected Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
@@ -26,6 +30,7 @@ public abstract class JDBC {
              Statement statement = connection.createStatement();
         ) {
             statement.executeUpdate(query);
+            logger.info("Query completed");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,6 +55,7 @@ public abstract class JDBC {
             } else if (paramNumber == 4) {
                 return prop.getProperty("password");
             } else {
+                logger.error("Invalid input parameters for database connection");
                 return null;
             }
 

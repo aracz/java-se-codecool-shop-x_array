@@ -5,6 +5,8 @@ import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,6 +17,8 @@ import java.util.List;
 
 public class ProductDaoJDBC extends JDBC implements ProductDao {
     private static ProductDaoJDBC instance = null;
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductDaoJDBC.class);
 
     private ProductDaoJDBC() {
     }
@@ -69,6 +73,7 @@ public class ProductDaoJDBC extends JDBC implements ProductDao {
                 "'" + product.getDefaultCurrency() + "', '" + product.getDescription() + "', '" + product.getProductCategory() + "'" +
                 ", '" + product.getSupplier() + "');";
         executeQuery(query);
+        logger.info("New product {} has been added", product.getName());
     }
 
 
@@ -93,6 +98,7 @@ public class ProductDaoJDBC extends JDBC implements ProductDao {
 
                 return productSetup(resultSet);
             } else {
+                logger.warn("Product does not exist");
                 return null;
             }
 
@@ -112,6 +118,7 @@ public class ProductDaoJDBC extends JDBC implements ProductDao {
 
         String query = "DELETE FROM products WHERE product_id = '" + id + "';";
         executeQuery(query);
+        logger.info("Product has been removed");
     }
 
 
@@ -140,6 +147,7 @@ public class ProductDaoJDBC extends JDBC implements ProductDao {
             productsFromDB.add(find(prod));
         }
 
+        logger.trace("All available products: {}", productsFromDB);
         return productsFromDB;
     }
 
@@ -165,7 +173,7 @@ public class ProductDaoJDBC extends JDBC implements ProductDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        logger.debug("Products filtered by supplier {}", supplier.getName());
         return productsFromDB;
     }
 
@@ -191,7 +199,7 @@ public class ProductDaoJDBC extends JDBC implements ProductDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        logger.debug("Products filtered by category {}", productCategory.getName());
         return productsFromDB;
     }
 }

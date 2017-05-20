@@ -5,6 +5,8 @@ import com.codecool.shop.dao.ShoppingCartDao;
 import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.*;
 import com.codecool.shop.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
@@ -15,6 +17,8 @@ import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
 public class Main {
+
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException {
 
@@ -63,6 +67,7 @@ public class Main {
             LineItem item = new LineItem(product, 1);
             shoppingCartDataStore.add(item);
             res.redirect("/");
+            logger.info("{} has been added to cart", product.getName());
             return null;
         });
 
@@ -70,6 +75,7 @@ public class Main {
             LineItem item = shoppingCartDataStore.find(Integer.parseInt(req.params(":id")));
             shoppingCartDataStore.changeAmount(item, 1);
             res.redirect("/cart");
+            logger.info("Added 1 more of {} to cart", item.getName());
             return null;
 
         });
@@ -78,6 +84,7 @@ public class Main {
             LineItem item = shoppingCartDataStore.find(Integer.parseInt(req.params(":id")));
             shoppingCartDataStore.changeAmount(item, -1);
             res.redirect("/cart");
+            logger.info("Removed 1 of {} from cart", item.getName());
             return null;
         });
 
@@ -86,6 +93,7 @@ public class Main {
             shoppingCartDataStore.remove(item);
             item.setQuantity(1);
             res.redirect("/cart");
+            logger.info("Removed {} from cart", item.getName());
             return null;
         });
 

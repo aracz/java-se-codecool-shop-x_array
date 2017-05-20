@@ -5,6 +5,8 @@ import com.codecool.shop.dao.JDBC;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.ShoppingCartDao;
 import com.codecool.shop.model.LineItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class ShoppingCartDaoJDBC extends JDBC implements ShoppingCartDao {
     private static ShoppingCartDaoJDBC instance = null;
+    private static final Logger logger = LoggerFactory.getLogger(ShoppingCartDaoJDBC.class);
 
     private ShoppingCartDaoJDBC() {
     }
@@ -78,6 +81,7 @@ public class ShoppingCartDaoJDBC extends JDBC implements ShoppingCartDao {
 
                 return lineItemSetup(resultSet);
             } else {
+                logger.warn("Line item does not exist");
                 return null;
             }
 
@@ -113,6 +117,8 @@ public class ShoppingCartDaoJDBC extends JDBC implements ShoppingCartDao {
             lineItemsFromDB.add(find(item));
         }
 
+        logger.trace("All line items: {}", lineItemsFromDB);
+
         return lineItemsFromDB;
     }
 
@@ -136,6 +142,7 @@ public class ShoppingCartDaoJDBC extends JDBC implements ShoppingCartDao {
             if (resultSet.next()) {
 
                 totalPrice = resultSet.getFloat("total_price");
+                logger.debug("Total value of cart: {}", totalPrice);
                 return Float.toString(totalPrice)+" USD";
             } else {
                 return null;

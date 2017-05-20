@@ -118,7 +118,6 @@ img {
 }
 
 .jumbotron {
-    background-image: url("public/img/background.jpg");
     font-weight: 900;
     color: white;
     border: none;

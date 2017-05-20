@@ -4,6 +4,8 @@ package com.codecool.shop.dao.implementation;
 import com.codecool.shop.dao.JDBC;
 import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.model.Supplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,6 +16,7 @@ import java.util.List;
 
 public class SupplierDaoJDBC extends JDBC implements SupplierDao {
     private static SupplierDaoJDBC instance = null;
+    private static final Logger logger = LoggerFactory.getLogger(SupplierDaoJDBC.class);
 
     private SupplierDaoJDBC() {
     }
@@ -42,6 +45,7 @@ public class SupplierDaoJDBC extends JDBC implements SupplierDao {
                 "VALUES ('" + supplier.getId() + "','" + supplier.getName() + "','"
                 + supplier.getDescription() + "');";
         executeQuery(query);
+        logger.info("Supplier has been added");
     }
 
 
@@ -60,6 +64,7 @@ public class SupplierDaoJDBC extends JDBC implements SupplierDao {
             if (resultSet.next()) {
                 return supplierSetup(resultSet);
             } else {
+                logger.warn("Supplier does not exist");
                 return null;
             }
 
@@ -79,6 +84,7 @@ public class SupplierDaoJDBC extends JDBC implements SupplierDao {
 
         String query = "DELETE FROM suppliers WHERE supplier_id = '" + id + "';";
         executeQuery(query);
+        logger.info("Supplier has been removed");
     }
 
 
@@ -101,6 +107,9 @@ public class SupplierDaoJDBC extends JDBC implements SupplierDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        logger.trace("List of all suppliers: {}", suppliersFromDB);
+
         return suppliersFromDB;
     }
 }
