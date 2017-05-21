@@ -16,13 +16,33 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * <h1>Class to extend JDBC and implement ShoppingCartDao</h1>
+ * This implementation uses the database to store data.
+ *
+ * @author Adam Kovacs
+ * @author Daniel Majoross
+ * @author Anna Racz
+ * @version 1.0
+ * @since 20-05-2017
+ *
+ */
+
 public class ShoppingCartDaoJDBC extends JDBC implements ShoppingCartDao {
     private static ShoppingCartDaoJDBC instance = null;
     private static final Logger logger = LoggerFactory.getLogger(ShoppingCartDaoJDBC.class);
 
+    /**
+     * ShoppingCartDaoJDBC empty constructor
+     */
     private ShoppingCartDaoJDBC() {
     }
 
+    /**
+     * To get instance of ShoppingCartDaoJDBC if none exists
+     *
+     * @return instance of ShoppingCartDaoJDBC
+     */
     public static ShoppingCartDaoJDBC getInstance() {
         if (instance == null) {
             instance = new ShoppingCartDaoJDBC();
@@ -30,6 +50,12 @@ public class ShoppingCartDaoJDBC extends JDBC implements ShoppingCartDao {
         return instance;
     }
 
+    /**
+     * To set up LineItem from database
+     * @param resultSet result set of SQL query from database
+     * @return lineItem LineItem object
+     * @throws SQLException for invalid input
+     */
     public LineItem lineItemSetup(ResultSet resultSet) throws SQLException {
         ProductDaoJDBC product = ProductDaoJDBC.getInstance();
 
@@ -120,12 +146,6 @@ public class ShoppingCartDaoJDBC extends JDBC implements ShoppingCartDao {
         logger.trace("All line items: {}", lineItemsFromDB);
 
         return lineItemsFromDB;
-    }
-
-
-    @Override
-    public LineItem getFirst() {
-        return null;
     }
 
 

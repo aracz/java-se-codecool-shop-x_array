@@ -1,6 +1,5 @@
 package com.codecool.shop.dao.implementation;
 
-
 import com.codecool.shop.dao.JDBC;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.model.ProductCategory;
@@ -14,14 +13,33 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <h1>Class to extend JDBC and implement ProductCategoryDao</h1>
+ * This implementation uses the database to store data.
+ *
+ * @author Adam Kovacs
+ * @author Daniel Majoross
+ * @author Anna Racz
+ * @version 1.0
+ * @since 20-05-2017
+ *
+ */
+
 public class ProductCategoryDaoJDBC extends JDBC implements ProductCategoryDao {
     private static ProductCategoryDaoJDBC instance = null;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductCategoryDaoJDBC.class);
 
+    /**
+     * ProductCategoryDaoJDBC empty constructor
+     */
     private ProductCategoryDaoJDBC() {
     }
 
+    /**
+     * To get instance of ProductCategoryDaoJDBC if none exists
+     * @return instance of ProductCategoryDaoJDBC
+     */
     public static ProductCategoryDaoJDBC getInstance() {
         if (instance == null) {
             instance = new ProductCategoryDaoJDBC();
@@ -29,6 +47,13 @@ public class ProductCategoryDaoJDBC extends JDBC implements ProductCategoryDao {
         return instance;
     }
 
+    /**
+     * To set up product category from database
+     *
+     * @param resultSet result set of SQL query from database
+     * @return category ProductCategory object
+     * @throws SQLException for invalid input
+     */
     public ProductCategory productCategorySetup(ResultSet resultSet) throws SQLException {
         ProductCategory category = new ProductCategory(
                 resultSet.getInt("category_id"),

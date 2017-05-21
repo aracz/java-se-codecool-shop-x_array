@@ -16,11 +16,32 @@ import java.io.IOException;
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
+/**
+ * <h1>Main class</h1>
+ * This class is for running the application.
+ * Handles Spark routes
+ * Generates example data if the daoMem data handling is used.
+ *
+ * @author Adam Kovacs
+ * @author Daniel Majoross
+ * @author Anna Racz
+ * @version 1.0
+ * @since 20-05-2017
+ *
+ */
+
 public class Main {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException {
+
+        /**
+         * Main method, controlling the application.
+         * @param args unused.
+         * @return nothing.
+         * @throws IOException if element is missing.
+         */
 
         //MEM data handling
 //      ProductDao productDataStore = ProductDaoMem.getInstance();
@@ -33,7 +54,7 @@ public class Main {
         ProductDao productDataStore = ProductDaoJDBC.getInstance();
         ShoppingCartDaoJDBC shoppingCartDataStore = ShoppingCartDaoJDBC.getInstance();
 
-        // default server settings
+        //Default server settings
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         staticFileLocation("/public");
         port(8888);
@@ -49,10 +70,12 @@ public class Main {
             return new ThymeleafTemplateEngine().render(ProductController.renderProducts(req, res));
         });
 
+        //Filter by supplier
         get("/supplier/:name", (Request req, Response res) -> {
             return new ThymeleafTemplateEngine().render(ProductController.renderProductsFilteredBySupplier(req, res));
         });
 
+        //Filter by product category
         get("/category/:name", (Request req, Response res) -> {
             return new ThymeleafTemplateEngine().render(ProductController.renderProductsFilteredByCategory(req, res));
         });
@@ -71,6 +94,7 @@ public class Main {
             return null;
         });
 
+        //Increase amount of certain product by 1
         get("/cart1/:id", (Request req, Response res) -> {
             LineItem item = shoppingCartDataStore.find(Integer.parseInt(req.params(":id")));
             shoppingCartDataStore.changeAmount(item, 1);
@@ -80,6 +104,7 @@ public class Main {
 
         });
 
+        //Decrease amount of certain product by 1, removes product if amount is < 1
         get("/cart-1/:id", (Request req, Response res) -> {
             LineItem item = shoppingCartDataStore.find(Integer.parseInt(req.params(":id")));
             shoppingCartDataStore.changeAmount(item, -1);
@@ -88,6 +113,7 @@ public class Main {
             return null;
         });
 
+        //Remove product from cart
         get("/cart/remove/:id", (Request req, Response res) -> {
             LineItem item = shoppingCartDataStore.find(Integer.parseInt(req.params(":id")));
             shoppingCartDataStore.remove(item);
@@ -105,6 +131,11 @@ public class Main {
     }
 
     public static void populateData() {
+
+        /**
+         * populateData method creates example data for daoMEM implementation.
+         */
+
 
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();

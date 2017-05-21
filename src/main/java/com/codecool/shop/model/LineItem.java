@@ -5,15 +5,43 @@ import com.codecool.shop.dao.implementation.ShoppingCartDaoMem;
 
 import java.util.Currency;
 
+/**
+ * <h1>Class is used to construct LineItems stored in the shopping cart</h1>
+ * Each LineItem object is constructed of a Product object and a quantity attribute
+ *
+ * @author Adam Kovacs
+ * @author Daniel Majoross
+ * @author Anna Racz
+ * @version 1.0
+ * @since 20-05-2017
+ */
+
 public class LineItem {
 
+    /**
+     * ID attribute of LineItem instance
+     */
     private int id;
+    /**
+     * The Product object for the LineItem instance
+     */
     private Product product;
+    /**
+     * Quantity attribute for LineItem instance
+     */
     private int quantity;
+    /**
+     * Subtotal price per LineItem, quantity*amount
+     */
     private float subtotalPrice;
     static private int sumOfAll;
 
 
+    /**
+     * Constructor for LineItem
+     * @param product Product object to be included in line item
+     * @param quantity attribute of product in line item
+     */
     public LineItem(Product product, int quantity) {
         this.product = product;
         this.id = product.getId();
@@ -23,6 +51,12 @@ public class LineItem {
 
     }
 
+    /**
+     * Alternative constructor for LineItem
+     * @param id ID of the object
+     * @param product Product object to be included in line item
+     * @param quantity attribute of product in line item
+     */
     public LineItem(int id, Product product, int quantity) {
         this.id = id;
         this.product = product;

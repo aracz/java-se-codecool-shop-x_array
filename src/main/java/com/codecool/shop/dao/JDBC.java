@@ -13,9 +13,28 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+/**
+ * <h1>Abstract class for database related methods, inherited by other classes</h1>
+ * This class includes the most frequently used jdbc-related methods and included in other classes
+ * by inheritance.
+ *
+ * @author Adam Kovacs
+ * @author Daniel Majoross
+ * @author Anna Racz
+ * @version 1.0
+ * @since 20-05-2017
+ *
+ */
+
 public abstract class JDBC {
 
     private static final Logger logger = LoggerFactory.getLogger(JDBC.class);
+
+    /**
+     * Establishes connection with the database
+     * @return connection with properties from the read() method
+     * @throws SQLException to handle database connection issues
+     */
 
     protected Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
@@ -23,6 +42,11 @@ public abstract class JDBC {
                 read(3),
                 read(4));
     }
+
+    /**
+     * Forwards sql queries to the database
+     * @param query sql query
+     */
 
     protected void executeQuery(String query) {
 
@@ -38,6 +62,11 @@ public abstract class JDBC {
 
     }
 
+    /**
+     * Reads the related information from connection.properties file
+     * @param paramNumber which parameter is needed, 1: url, 2: name of database, 3: username, 4: password
+     * @return requested information or null if there's an issue
+     */
     protected String read(int paramNumber) {
         Properties prop = new Properties();
         InputStream input = null;

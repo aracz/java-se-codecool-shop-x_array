@@ -15,14 +15,33 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <h1>Class to extend JDBC and implement ProductDao</h1>
+ * This implementation uses the database to store data.
+ *
+ * @author Adam Kovacs
+ * @author Daniel Majoross
+ * @author Anna Racz
+ * @version 1.0
+ * @since 20-05-2017
+ *
+ */
+
 public class ProductDaoJDBC extends JDBC implements ProductDao {
     private static ProductDaoJDBC instance = null;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductDaoJDBC.class);
 
+    /**
+     * ProductDaoJDBC empty constructor
+     */
     private ProductDaoJDBC() {
     }
 
+    /**
+     * To get instance of ProductDaoJDBC if none exists
+     * @return instance of ProductDaoJDBC
+     */
     public static ProductDaoJDBC getInstance() {
 
         if (instance == null) {
@@ -31,6 +50,13 @@ public class ProductDaoJDBC extends JDBC implements ProductDao {
         return instance;
     }
 
+    /**
+     * To set up supplier from database
+     *
+     * @param resultSet result set of SQL query from database
+     * @return supplier Supplier object
+     * @throws SQLException for invalid input
+     */
     public Supplier supplierSetup(ResultSet resultSet) throws SQLException {
         Supplier supplier = new Supplier(
                 resultSet.getInt("supplier_id"),
@@ -40,6 +66,12 @@ public class ProductDaoJDBC extends JDBC implements ProductDao {
         return supplier;
     }
 
+    /**
+     * To set up product category from database
+     * @param resultSet result set of SQL query from database
+     * @return category ProductCategory object
+     * @throws SQLException for invalid input
+     */
     public ProductCategory productCategorySetup(ResultSet resultSet) throws SQLException {
         ProductCategory category = new ProductCategory(
                 resultSet.getInt("category_id"),
@@ -50,6 +82,12 @@ public class ProductDaoJDBC extends JDBC implements ProductDao {
         return category;
     }
 
+    /**
+     * To set up product from database
+     * @param resultSet result set of SQL query from database
+     * @return product Product object
+     * @throws SQLException for invalid input
+     */
     public Product productSetup(ResultSet resultSet) throws SQLException {
 
         Product result = new Product(

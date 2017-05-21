@@ -14,13 +14,32 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <h1>Class to extend JDBC and implement SupplierDao</h1>
+ * This implementation uses the database to store data.
+ *
+ * @author Adam Kovacs
+ * @author Daniel Majoross
+ * @author Anna Racz
+ * @version 1.0
+ * @since 20-05-2017
+ */
+
 public class SupplierDaoJDBC extends JDBC implements SupplierDao {
     private static SupplierDaoJDBC instance = null;
     private static final Logger logger = LoggerFactory.getLogger(SupplierDaoJDBC.class);
 
+    /**
+     * ShoppingCartDaoJDBC empty constructor
+     */
     private SupplierDaoJDBC() {
     }
 
+    /**
+     * To get instance of SupplierDaoJDBC if none exists
+     *
+     * @return instance of SupplierDaoJDBC
+     */
     public static SupplierDaoJDBC getInstance() {
         if (instance == null) {
             instance = new SupplierDaoJDBC();
@@ -28,6 +47,13 @@ public class SupplierDaoJDBC extends JDBC implements SupplierDao {
         return instance;
     }
 
+    /**
+     * To set up supplier from database
+     *
+     * @param resultSet result set of SQL query from database
+     * @return supplier Supplier object
+     * @throws SQLException for invalid input
+     */
     public Supplier supplierSetup(ResultSet resultSet) throws SQLException {
         Supplier supplier = new Supplier(
                 resultSet.getInt("supplier_id"),
